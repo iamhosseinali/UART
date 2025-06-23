@@ -17,7 +17,7 @@
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="228"></NameColumnWidth>
-      <ValueColumnWidth column_width="159"></ValueColumnWidth>
+      <ValueColumnWidth column_width="155"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="2" />
    <wvobject fp_name="/design_1_wrapper/M_AXIS_0_tdata" type="array">

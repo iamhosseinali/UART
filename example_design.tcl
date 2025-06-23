@@ -99,15 +99,15 @@ set_property -name "sim.central_dir" -value "$proj_dir/${_xil_proj_name_}.ip_use
 set_property -name "sim.ip.auto_export_scripts" -value "1" -objects $obj
 set_property -name "simulator_language" -value "Mixed" -objects $obj
 set_property -name "target_language" -value "VHDL" -objects $obj
-set_property -name "webtalk.activehdl_export_sim" -value "4" -objects $obj
-set_property -name "webtalk.ies_export_sim" -value "4" -objects $obj
-set_property -name "webtalk.modelsim_export_sim" -value "4" -objects $obj
-set_property -name "webtalk.questa_export_sim" -value "4" -objects $obj
-set_property -name "webtalk.riviera_export_sim" -value "4" -objects $obj
-set_property -name "webtalk.vcs_export_sim" -value "4" -objects $obj
-set_property -name "webtalk.xcelium_export_sim" -value "4" -objects $obj
-set_property -name "webtalk.xsim_export_sim" -value "4" -objects $obj
-set_property -name "webtalk.xsim_launch_sim" -value "8" -objects $obj
+set_property -name "webtalk.activehdl_export_sim" -value "5" -objects $obj
+set_property -name "webtalk.ies_export_sim" -value "5" -objects $obj
+set_property -name "webtalk.modelsim_export_sim" -value "5" -objects $obj
+set_property -name "webtalk.questa_export_sim" -value "5" -objects $obj
+set_property -name "webtalk.riviera_export_sim" -value "5" -objects $obj
+set_property -name "webtalk.vcs_export_sim" -value "5" -objects $obj
+set_property -name "webtalk.xcelium_export_sim" -value "5" -objects $obj
+set_property -name "webtalk.xsim_export_sim" -value "5" -objects $obj
+set_property -name "webtalk.xsim_launch_sim" -value "9" -objects $obj
 
 # Create 'sources_1' fileset (if not found)
 if {[string equal [get_filesets -quiet sources_1] ""]} {
@@ -370,8 +370,8 @@ proc cr_bd_design_1 { parentCell } {
   set sim_clk_gen_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:sim_clk_gen:1.0 sim_clk_gen_0 ]
 
   # Create interface connections
-  connect_bd_intf_net -intf_net Sine_Wave_Gen_0_M_AXIS [get_bd_intf_pins Sine_Wave_Gen_0/M_AXIS] [get_bd_intf_pins UART_Tx_0/M_AXIS]
-  connect_bd_intf_net -intf_net UART_Rx_0_AXI_m [get_bd_intf_pins UART_Rx_0/AXI_m] [get_bd_intf_pins comp_0/S_AXIS]
+  connect_bd_intf_net -intf_net Sine_Wave_Gen_0_M_AXIS [get_bd_intf_pins Sine_Wave_Gen_0/M_AXIS] [get_bd_intf_pins UART_Tx_0/S_AXIS]
+  connect_bd_intf_net -intf_net UART_Rx_0_M_AXIS [get_bd_intf_pins UART_Rx_0/M_AXIS] [get_bd_intf_pins comp_0/S_AXIS]
   connect_bd_intf_net -intf_net comp_0_M_AXIS [get_bd_intf_ports M_AXIS_0] [get_bd_intf_pins comp_0/M_AXIS]
 
   # Create port connections
