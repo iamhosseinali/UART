@@ -1,9 +1,9 @@
 #*****************************************************************************************
-# Vivado (TM) v2019.1 (64-bit)
+# Vivado (TM) v2018.2 (64-bit)
 #
 # example_design.tcl: Tcl script for re-creating project 'example_design'
 #
-# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
 #
 # This file contains the Vivado Tcl commands for re-creating the project to the state*
 # when this script was generated. In order to re-create the project, please source this
@@ -89,7 +89,6 @@ set proj_dir [get_property directory [current_project]]
 
 # Set project properties
 set obj [current_project]
-set_property -name "board_part_repo_paths" -value "C:/Users/Hosseinali/AppData/Roaming/Xilinx/Vivado/2019.1/xhub/board_store" -objects $obj
 set_property -name "default_lib" -value "xil_defaultlib" -objects $obj
 set_property -name "enable_vhdl_2008" -value "1" -objects $obj
 set_property -name "ip_cache_permissions" -value "read write" -objects $obj
@@ -100,16 +99,15 @@ set_property -name "sim.central_dir" -value "$proj_dir/${_xil_proj_name_}.ip_use
 set_property -name "sim.ip.auto_export_scripts" -value "1" -objects $obj
 set_property -name "simulator_language" -value "Mixed" -objects $obj
 set_property -name "target_language" -value "VHDL" -objects $obj
-set_property -name "webtalk.activehdl_export_sim" -value "3" -objects $obj
-set_property -name "webtalk.ies_export_sim" -value "3" -objects $obj
-set_property -name "webtalk.modelsim_export_sim" -value "3" -objects $obj
-set_property -name "webtalk.questa_export_sim" -value "3" -objects $obj
-set_property -name "webtalk.riviera_export_sim" -value "3" -objects $obj
-set_property -name "webtalk.vcs_export_sim" -value "3" -objects $obj
-set_property -name "webtalk.xcelium_export_sim" -value "3" -objects $obj
-set_property -name "webtalk.xsim_export_sim" -value "3" -objects $obj
-set_property -name "webtalk.xsim_launch_sim" -value "3" -objects $obj
-set_property -name "xpm_libraries" -value "XPM_CDC XPM_FIFO" -objects $obj
+set_property -name "webtalk.activehdl_export_sim" -value "2" -objects $obj
+set_property -name "webtalk.ies_export_sim" -value "2" -objects $obj
+set_property -name "webtalk.modelsim_export_sim" -value "2" -objects $obj
+set_property -name "webtalk.questa_export_sim" -value "2" -objects $obj
+set_property -name "webtalk.riviera_export_sim" -value "2" -objects $obj
+set_property -name "webtalk.vcs_export_sim" -value "2" -objects $obj
+set_property -name "webtalk.xcelium_export_sim" -value "2" -objects $obj
+set_property -name "webtalk.xsim_export_sim" -value "2" -objects $obj
+set_property -name "webtalk.xsim_launch_sim" -value "2" -objects $obj
 
 # Create 'sources_1' fileset (if not found)
 if {[string equal [get_filesets -quiet sources_1] ""]} {
@@ -119,24 +117,24 @@ if {[string equal [get_filesets -quiet sources_1] ""]} {
 # Set 'sources_1' fileset object
 set obj [get_filesets sources_1]
 set files [list \
+ [file normalize "${origin_dir}/pl_src/Sine_Wave_Gen.vhd"] \
  [file normalize "${origin_dir}/pl_src/UART_Tx.vhd"] \
  [file normalize "${origin_dir}/pl_src/UART_Rx.vhd"] \
- [file normalize "${origin_dir}/pl_src/Sine_Wave_Gen.vhd"] \
 ]
 add_files -norecurse -fileset $obj $files
 
 # Set 'sources_1' fileset file properties for remote files
+set file "$origin_dir/pl_src/Sine_Wave_Gen.vhd"
+set file [file normalize $file]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL" -objects $file_obj
+
 set file "$origin_dir/pl_src/UART_Tx.vhd"
 set file [file normalize $file]
 set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
 set_property -name "file_type" -value "VHDL" -objects $file_obj
 
 set file "$origin_dir/pl_src/UART_Rx.vhd"
-set file [file normalize $file]
-set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
-set_property -name "file_type" -value "VHDL" -objects $file_obj
-
-set file "$origin_dir/pl_src/Sine_Wave_Gen.vhd"
 set file [file normalize $file]
 set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
 set_property -name "file_type" -value "VHDL" -objects $file_obj
@@ -177,23 +175,16 @@ set obj [get_filesets sim_1]
 set_property -name "top" -value "design_1_wrapper" -objects $obj
 set_property -name "top_lib" -value "xil_defaultlib" -objects $obj
 
-# Set 'utils_1' fileset object
-set obj [get_filesets utils_1]
-# Empty (no sources present)
-
-# Set 'utils_1' fileset properties
-set obj [get_filesets utils_1]
-
 
 # Adding sources referenced in BDs, if not already added
+if { [get_files Sine_Wave_Gen.vhd] == "" } {
+  import_files -quiet -fileset sources_1 D:/edu/Hosseinali/FPGA/ip_repo/HDL/UART/pl_src/Sine_Wave_Gen.vhd
+}
 if { [get_files UART_Tx.vhd] == "" } {
-  import_files -quiet -fileset sources_1 D:/edu/Hosseinali/FPGA/ip_repo/UART/pl_src/UART_Tx.vhd
+  import_files -quiet -fileset sources_1 D:/edu/Hosseinali/FPGA/ip_repo/HDL/UART/pl_src/UART_Tx.vhd
 }
 if { [get_files UART_Rx.vhd] == "" } {
-  import_files -quiet -fileset sources_1 D:/edu/Hosseinali/FPGA/ip_repo/UART/pl_src/UART_Rx.vhd
-}
-if { [get_files Sine_Wave_Gen.vhd] == "" } {
-  import_files -quiet -fileset sources_1 D:/edu/Hosseinali/FPGA/ip_repo/UART/pl_src/Sine_Wave_Gen.vhd
+  import_files -quiet -fileset sources_1 D:/edu/Hosseinali/FPGA/ip_repo/HDL/UART/pl_src/UART_Rx.vhd
 }
 
 
@@ -219,7 +210,6 @@ proc cr_bd_design_1 { parentCell } {
   set bCheckIPs 1
   if { $bCheckIPs == 1 } {
      set list_check_ips "\ 
-  xilinx.com:ip:axis_data_fifo:2.0\
   xilinx.com:ip:sim_clk_gen:1.0\
   "
 
@@ -302,7 +292,6 @@ proc cr_bd_design_1 { parentCell } {
   # Create interface ports
   set AXI_m_0 [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 AXI_m_0 ]
 
-
   # Create ports
 
   # Create instance: Sine_Wave_Gen_0, and set properties
@@ -316,7 +305,7 @@ proc cr_bd_design_1 { parentCell } {
      return 1
    }
     set_property -dict [ list \
-   CONFIG.OUTPUT_SIGNAL_FREQUENCY {1000} \
+   CONFIG.OUTPUT_SIGNAL_FREQUENCY {150} \
  ] $Sine_Wave_Gen_0
 
   # Create instance: UART_Rx_0, and set properties
@@ -330,7 +319,7 @@ proc cr_bd_design_1 { parentCell } {
      return 1
    }
     set_property -dict [ list \
-   CONFIG.BaudRate {115200} \
+   CONFIG.BaudRate {300000} \
  ] $UART_Rx_0
 
   # Create instance: UART_Tx_0, and set properties
@@ -344,27 +333,20 @@ proc cr_bd_design_1 { parentCell } {
      return 1
    }
     set_property -dict [ list \
-   CONFIG.BaudRate {115200} \
+   CONFIG.BaudRate {300000} \
  ] $UART_Tx_0
-
-  # Create instance: axis_data_fifo_0, and set properties
-  set axis_data_fifo_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_data_fifo:2.0 axis_data_fifo_0 ]
-  set_property -dict [ list \
-   CONFIG.FIFO_DEPTH {1024} \
- ] $axis_data_fifo_0
 
   # Create instance: sim_clk_gen_0, and set properties
   set sim_clk_gen_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:sim_clk_gen:1.0 sim_clk_gen_0 ]
 
   # Create interface connections
-  connect_bd_intf_net -intf_net Sine_Wave_Gen_0_M_AXIS [get_bd_intf_pins Sine_Wave_Gen_0/M_AXIS] [get_bd_intf_pins axis_data_fifo_0/S_AXIS]
+  connect_bd_intf_net -intf_net Sine_Wave_Gen_0_M_AXIS [get_bd_intf_pins Sine_Wave_Gen_0/M_AXIS] [get_bd_intf_pins UART_Tx_0/M_AXIS]
   connect_bd_intf_net -intf_net UART_Rx_0_AXI_m [get_bd_intf_ports AXI_m_0] [get_bd_intf_pins UART_Rx_0/AXI_m]
-  connect_bd_intf_net -intf_net axis_data_fifo_0_M_AXIS [get_bd_intf_pins UART_Tx_0/M_AXIS] [get_bd_intf_pins axis_data_fifo_0/M_AXIS]
 
   # Create port connections
   connect_bd_net -net UART_Tx_0_Tx [get_bd_pins UART_Rx_0/Rx] [get_bd_pins UART_Tx_0/Tx]
-  connect_bd_net -net sim_clk_gen_0_clk [get_bd_pins Sine_Wave_Gen_0/M_AXIS_ACLK] [get_bd_pins UART_Rx_0/clk] [get_bd_pins UART_Tx_0/clock] [get_bd_pins axis_data_fifo_0/s_axis_aclk] [get_bd_pins sim_clk_gen_0/clk]
-  connect_bd_net -net sim_clk_gen_0_sync_rst [get_bd_pins Sine_Wave_Gen_0/M_AXIS_ARESETN] [get_bd_pins UART_Rx_0/nRST] [get_bd_pins axis_data_fifo_0/s_axis_aresetn] [get_bd_pins sim_clk_gen_0/sync_rst]
+  connect_bd_net -net sim_clk_gen_0_clk [get_bd_pins Sine_Wave_Gen_0/M_AXIS_ACLK] [get_bd_pins UART_Rx_0/clk] [get_bd_pins UART_Tx_0/clock] [get_bd_pins sim_clk_gen_0/clk]
+  connect_bd_net -net sim_clk_gen_0_sync_rst [get_bd_pins Sine_Wave_Gen_0/M_AXIS_ARESETN] [get_bd_pins UART_Rx_0/nRST] [get_bd_pins sim_clk_gen_0/sync_rst]
 
   # Create address segments
 
@@ -372,12 +354,12 @@ proc cr_bd_design_1 { parentCell } {
   # Restore current instance
   current_bd_instance $oldCurInst
 
-  validate_bd_design
   save_bd_design
   close_bd_design $design_name 
 }
 # End of cr_bd_design_1()
 cr_bd_design_1 ""
+set_property IS_MANAGED "0" [get_files design_1.bd ] 
 set_property REGISTERED_WITH_MANAGER "1" [get_files design_1.bd ] 
 set_property SYNTH_CHECKPOINT_MODE "Hierarchical" [get_files design_1.bd ] 
 
@@ -387,10 +369,10 @@ make_wrapper -files [get_files design_1.bd] -import -top
 
 # Create 'synth_1' run (if not found)
 if {[string equal [get_runs -quiet synth_1] ""]} {
-    create_run -name synth_1 -part xc7z010clg400-1 -flow {Vivado Synthesis 2019} -strategy "Vivado Synthesis Defaults" -report_strategy {No Reports} -constrset constrs_1
+    create_run -name synth_1 -part xc7z010clg400-1 -flow {Vivado Synthesis 2018} -strategy "Vivado Synthesis Defaults" -report_strategy {No Reports} -constrset constrs_1
 } else {
   set_property strategy "Vivado Synthesis Defaults" [get_runs synth_1]
-  set_property flow "Vivado Synthesis 2019" [get_runs synth_1]
+  set_property flow "Vivado Synthesis 2018" [get_runs synth_1]
 }
 set obj [get_runs synth_1]
 set_property set_report_strategy_name 1 $obj
@@ -413,10 +395,10 @@ current_run -synthesis [get_runs synth_1]
 
 # Create 'impl_1' run (if not found)
 if {[string equal [get_runs -quiet impl_1] ""]} {
-    create_run -name impl_1 -part xc7z010clg400-1 -flow {Vivado Implementation 2019} -strategy "Vivado Implementation Defaults" -report_strategy {No Reports} -constrset constrs_1 -parent_run synth_1
+    create_run -name impl_1 -part xc7z010clg400-1 -flow {Vivado Implementation 2018} -strategy "Vivado Implementation Defaults" -report_strategy {No Reports} -constrset constrs_1 -parent_run synth_1
 } else {
   set_property strategy "Vivado Implementation Defaults" [get_runs impl_1]
-  set_property flow "Vivado Implementation 2019" [get_runs impl_1]
+  set_property flow "Vivado Implementation 2018" [get_runs impl_1]
 }
 set obj [get_runs impl_1]
 set_property set_report_strategy_name 1 $obj
@@ -429,7 +411,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_ini
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_init_report_timing_summary_0]
 if { $obj != "" } {
 set_property -name "is_enabled" -value "0" -objects $obj
-set_property -name "options.max_paths" -value "10" -objects $obj
 
 }
 # Create 'impl_1_opt_report_drc_0' report (if not found)
@@ -447,7 +428,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_opt
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_opt_report_timing_summary_0]
 if { $obj != "" } {
 set_property -name "is_enabled" -value "0" -objects $obj
-set_property -name "options.max_paths" -value "10" -objects $obj
 
 }
 # Create 'impl_1_power_opt_report_timing_summary_0' report (if not found)
@@ -457,7 +437,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_pow
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_power_opt_report_timing_summary_0]
 if { $obj != "" } {
 set_property -name "is_enabled" -value "0" -objects $obj
-set_property -name "options.max_paths" -value "10" -objects $obj
 
 }
 # Create 'impl_1_place_report_io_0' report (if not found)
@@ -482,7 +461,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_pla
 }
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_control_sets_0]
 if { $obj != "" } {
-set_property -name "options.verbose" -value "1" -objects $obj
 
 }
 # Create 'impl_1_place_report_incremental_reuse_0' report (if not found)
@@ -510,7 +488,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_pla
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_timing_summary_0]
 if { $obj != "" } {
 set_property -name "is_enabled" -value "0" -objects $obj
-set_property -name "options.max_paths" -value "10" -objects $obj
 
 }
 # Create 'impl_1_post_place_power_opt_report_timing_summary_0' report (if not found)
@@ -520,7 +497,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_pos
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_post_place_power_opt_report_timing_summary_0]
 if { $obj != "" } {
 set_property -name "is_enabled" -value "0" -objects $obj
-set_property -name "options.max_paths" -value "10" -objects $obj
 
 }
 # Create 'impl_1_phys_opt_report_timing_summary_0' report (if not found)
@@ -530,7 +506,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_phy
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_phys_opt_report_timing_summary_0]
 if { $obj != "" } {
 set_property -name "is_enabled" -value "0" -objects $obj
-set_property -name "options.max_paths" -value "10" -objects $obj
 
 }
 # Create 'impl_1_route_report_drc_0' report (if not found)
@@ -571,7 +546,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_rou
 }
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_timing_summary_0]
 if { $obj != "" } {
-set_property -name "options.max_paths" -value "10" -objects $obj
 
 }
 # Create 'impl_1_route_report_incremental_reuse_0' report (if not found)
@@ -596,7 +570,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_rou
 }
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_bus_skew_0]
 if { $obj != "" } {
-set_property -name "options.warn_on_violation" -value "1" -objects $obj
 
 }
 # Create 'impl_1_post_route_phys_opt_report_timing_summary_0' report (if not found)
@@ -605,8 +578,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_pos
 }
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_post_route_phys_opt_report_timing_summary_0]
 if { $obj != "" } {
-set_property -name "options.max_paths" -value "10" -objects $obj
-set_property -name "options.warn_on_violation" -value "1" -objects $obj
 
 }
 # Create 'impl_1_post_route_phys_opt_report_bus_skew_0' report (if not found)
@@ -615,7 +586,6 @@ if { [ string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_pos
 }
 set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_post_route_phys_opt_report_bus_skew_0]
 if { $obj != "" } {
-set_property -name "options.warn_on_violation" -value "1" -objects $obj
 
 }
 set obj [get_runs impl_1]
@@ -631,53 +601,3 @@ current_run -implementation [get_runs impl_1]
 cd [file dirname [info script]]
 
 puts "INFO: Project created:${_xil_proj_name_}"
-# Create 'drc_1' gadget (if not found)
-if {[string equal [get_dashboard_gadgets  [ list "drc_1" ] ] ""]} {
-create_dashboard_gadget -name {drc_1} -type drc
-}
-set obj [get_dashboard_gadgets [ list "drc_1" ] ]
-set_property -name "reports" -value "impl_1#impl_1_route_report_drc_0" -objects $obj
-
-# Create 'methodology_1' gadget (if not found)
-if {[string equal [get_dashboard_gadgets  [ list "methodology_1" ] ] ""]} {
-create_dashboard_gadget -name {methodology_1} -type methodology
-}
-set obj [get_dashboard_gadgets [ list "methodology_1" ] ]
-set_property -name "reports" -value "impl_1#impl_1_route_report_methodology_0" -objects $obj
-
-# Create 'power_1' gadget (if not found)
-if {[string equal [get_dashboard_gadgets  [ list "power_1" ] ] ""]} {
-create_dashboard_gadget -name {power_1} -type power
-}
-set obj [get_dashboard_gadgets [ list "power_1" ] ]
-set_property -name "reports" -value "impl_1#impl_1_route_report_power_0" -objects $obj
-
-# Create 'timing_1' gadget (if not found)
-if {[string equal [get_dashboard_gadgets  [ list "timing_1" ] ] ""]} {
-create_dashboard_gadget -name {timing_1} -type timing
-}
-set obj [get_dashboard_gadgets [ list "timing_1" ] ]
-set_property -name "reports" -value "impl_1#impl_1_route_report_timing_summary_0" -objects $obj
-
-# Create 'utilization_1' gadget (if not found)
-if {[string equal [get_dashboard_gadgets  [ list "utilization_1" ] ] ""]} {
-create_dashboard_gadget -name {utilization_1} -type utilization
-}
-set obj [get_dashboard_gadgets [ list "utilization_1" ] ]
-set_property -name "reports" -value "synth_1#synth_1_synth_report_utilization_0" -objects $obj
-set_property -name "run.step" -value "synth_design" -objects $obj
-set_property -name "run.type" -value "synthesis" -objects $obj
-
-# Create 'utilization_2' gadget (if not found)
-if {[string equal [get_dashboard_gadgets  [ list "utilization_2" ] ] ""]} {
-create_dashboard_gadget -name {utilization_2} -type utilization
-}
-set obj [get_dashboard_gadgets [ list "utilization_2" ] ]
-set_property -name "reports" -value "impl_1#impl_1_place_report_utilization_0" -objects $obj
-
-move_dashboard_gadget -name {utilization_1} -row 0 -col 0
-move_dashboard_gadget -name {power_1} -row 1 -col 0
-move_dashboard_gadget -name {drc_1} -row 2 -col 0
-move_dashboard_gadget -name {timing_1} -row 0 -col 1
-move_dashboard_gadget -name {utilization_2} -row 1 -col 1
-move_dashboard_gadget -name {methodology_1} -row 2 -col 1
