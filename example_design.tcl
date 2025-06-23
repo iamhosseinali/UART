@@ -99,15 +99,15 @@ set_property -name "sim.central_dir" -value "$proj_dir/${_xil_proj_name_}.ip_use
 set_property -name "sim.ip.auto_export_scripts" -value "1" -objects $obj
 set_property -name "simulator_language" -value "Mixed" -objects $obj
 set_property -name "target_language" -value "VHDL" -objects $obj
-set_property -name "webtalk.activehdl_export_sim" -value "2" -objects $obj
-set_property -name "webtalk.ies_export_sim" -value "2" -objects $obj
-set_property -name "webtalk.modelsim_export_sim" -value "2" -objects $obj
-set_property -name "webtalk.questa_export_sim" -value "2" -objects $obj
-set_property -name "webtalk.riviera_export_sim" -value "2" -objects $obj
-set_property -name "webtalk.vcs_export_sim" -value "2" -objects $obj
-set_property -name "webtalk.xcelium_export_sim" -value "2" -objects $obj
-set_property -name "webtalk.xsim_export_sim" -value "2" -objects $obj
-set_property -name "webtalk.xsim_launch_sim" -value "2" -objects $obj
+set_property -name "webtalk.activehdl_export_sim" -value "4" -objects $obj
+set_property -name "webtalk.ies_export_sim" -value "4" -objects $obj
+set_property -name "webtalk.modelsim_export_sim" -value "4" -objects $obj
+set_property -name "webtalk.questa_export_sim" -value "4" -objects $obj
+set_property -name "webtalk.riviera_export_sim" -value "4" -objects $obj
+set_property -name "webtalk.vcs_export_sim" -value "4" -objects $obj
+set_property -name "webtalk.xcelium_export_sim" -value "4" -objects $obj
+set_property -name "webtalk.xsim_export_sim" -value "4" -objects $obj
+set_property -name "webtalk.xsim_launch_sim" -value "8" -objects $obj
 
 # Create 'sources_1' fileset (if not found)
 if {[string equal [get_filesets -quiet sources_1] ""]} {
@@ -120,6 +120,7 @@ set files [list \
  [file normalize "${origin_dir}/pl_src/Sine_Wave_Gen.vhd"] \
  [file normalize "${origin_dir}/pl_src/UART_Tx.vhd"] \
  [file normalize "${origin_dir}/pl_src/UART_Rx.vhd"] \
+ [file normalize "${origin_dir}/pl_src/comp.vhd"] \
 ]
 add_files -norecurse -fileset $obj $files
 
@@ -135,6 +136,11 @@ set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
 set_property -name "file_type" -value "VHDL" -objects $file_obj
 
 set file "$origin_dir/pl_src/UART_Rx.vhd"
+set file [file normalize $file]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL" -objects $file_obj
+
+set file "$origin_dir/pl_src/comp.vhd"
 set file [file normalize $file]
 set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
 set_property -name "file_type" -value "VHDL" -objects $file_obj
@@ -168,7 +174,16 @@ if {[string equal [get_filesets -quiet sim_1] ""]} {
 
 # Set 'sim_1' fileset object
 set obj [get_filesets sim_1]
-# Empty (no sources present)
+set files [list \
+ [file normalize "${origin_dir}/pl_src/design_1_wrapper_behav.wcfg"] \
+]
+add_files -norecurse -fileset $obj $files
+
+# Set 'sim_1' fileset file properties for remote files
+# None
+
+# Set 'sim_1' fileset file properties for local files
+# None
 
 # Set 'sim_1' fileset properties
 set obj [get_filesets sim_1]
@@ -186,13 +201,16 @@ if { [get_files UART_Tx.vhd] == "" } {
 if { [get_files UART_Rx.vhd] == "" } {
   import_files -quiet -fileset sources_1 D:/edu/Hosseinali/FPGA/ip_repo/HDL/UART/pl_src/UART_Rx.vhd
 }
+if { [get_files comp.vhd] == "" } {
+  import_files -quiet -fileset sources_1 D:/edu/Hosseinali/FPGA/ip_repo/HDL/UART/pl_src/comp.vhd
+}
 
 
 # Proc to create BD design_1
 proc cr_bd_design_1 { parentCell } {
 # The design that will be created by this Tcl proc contains the following 
 # module references:
-# Sine_Wave_Gen, UART_Rx, UART_Tx
+# Sine_Wave_Gen, UART_Rx, UART_Tx, comp
 
 
 
@@ -239,6 +257,7 @@ proc cr_bd_design_1 { parentCell } {
   Sine_Wave_Gen\
   UART_Rx\
   UART_Tx\
+  comp\
   "
 
    set list_mods_missing ""
@@ -290,7 +309,7 @@ proc cr_bd_design_1 { parentCell } {
 
 
   # Create interface ports
-  set AXI_m_0 [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 AXI_m_0 ]
+  set M_AXIS_0 [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_0 ]
 
   # Create ports
 
@@ -336,16 +355,28 @@ proc cr_bd_design_1 { parentCell } {
    CONFIG.BaudRate {300000} \
  ] $UART_Tx_0
 
+  # Create instance: comp_0, and set properties
+  set block_name comp
+  set block_cell_name comp_0
+  if { [catch {set comp_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $comp_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
   # Create instance: sim_clk_gen_0, and set properties
   set sim_clk_gen_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:sim_clk_gen:1.0 sim_clk_gen_0 ]
 
   # Create interface connections
   connect_bd_intf_net -intf_net Sine_Wave_Gen_0_M_AXIS [get_bd_intf_pins Sine_Wave_Gen_0/M_AXIS] [get_bd_intf_pins UART_Tx_0/M_AXIS]
-  connect_bd_intf_net -intf_net UART_Rx_0_AXI_m [get_bd_intf_ports AXI_m_0] [get_bd_intf_pins UART_Rx_0/AXI_m]
+  connect_bd_intf_net -intf_net UART_Rx_0_AXI_m [get_bd_intf_pins UART_Rx_0/AXI_m] [get_bd_intf_pins comp_0/S_AXIS]
+  connect_bd_intf_net -intf_net comp_0_M_AXIS [get_bd_intf_ports M_AXIS_0] [get_bd_intf_pins comp_0/M_AXIS]
 
   # Create port connections
   connect_bd_net -net UART_Tx_0_Tx [get_bd_pins UART_Rx_0/Rx] [get_bd_pins UART_Tx_0/Tx]
-  connect_bd_net -net sim_clk_gen_0_clk [get_bd_pins Sine_Wave_Gen_0/M_AXIS_ACLK] [get_bd_pins UART_Rx_0/clk] [get_bd_pins UART_Tx_0/clock] [get_bd_pins sim_clk_gen_0/clk]
+  connect_bd_net -net sim_clk_gen_0_clk [get_bd_pins Sine_Wave_Gen_0/M_AXIS_ACLK] [get_bd_pins UART_Rx_0/clk] [get_bd_pins UART_Tx_0/clock] [get_bd_pins comp_0/clk] [get_bd_pins sim_clk_gen_0/clk]
   connect_bd_net -net sim_clk_gen_0_sync_rst [get_bd_pins Sine_Wave_Gen_0/M_AXIS_ARESETN] [get_bd_pins UART_Rx_0/nRST] [get_bd_pins sim_clk_gen_0/sync_rst]
 
   # Create address segments
