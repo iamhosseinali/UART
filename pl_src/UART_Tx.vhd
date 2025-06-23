@@ -1,5 +1,4 @@
 ----------------------------------------------------------------------------------
--- Company: IDK
 -- Engineer: Hosseinali
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -15,9 +14,9 @@ generic
 );
     Port ( 	 
 					Tx 		        : out  	STD_LOGIC;
-					M_AXIS_tREADY 	: out  	STD_LOGIC;				
-					M_AXIS_tVALID 	: in  	STD_LOGIC;
-					M_AXIS_tDATA	: in  	std_logic_vector(7 downto 0);					
+					S_AXIS_tREADY 	: out  	STD_LOGIC;				
+					S_AXIS_tVALID 	: in  	STD_LOGIC;
+					S_AXIS_tDATA	: in  	std_logic_vector(7 downto 0);					
 					clock  	        : in  	STD_LOGIC
 					
 			 );
@@ -46,24 +45,24 @@ architecture Behavioral of UART_Tx is
 	signal 	creating_parity	    : std_logic 	:= '0'; 
 	signal 	creating_packet	    : std_logic 	:= '0'; 
 	signal 	start_sending		: std_logic 	:= '0'; 
-	signal 	packet				: unsigned	(10 downto 0) 	:= (others	=> '0'); 
-	signal	clock_counter		: unsigned 	(31 downto 0) 	:= (others 	=> '0');
-	signal	bit_width_counter	: unsigned 	(3 downto 0) 	:= (others 	=> '0');
-	constant   Baud_Rate		:	integer				:=	(IP_INPUT_FREQUENCY/BaudRate);
+	signal 	packet				: unsigned(10 downto 0) 	:= (others	=> '0'); 
+	signal	clock_counter		: unsigned (31 downto 0) 	:= (others 	=> '0');
+	signal	bit_width_counter	: unsigned (3 downto 0) 	:= (others 	=> '0');
+	constant   Baud_Rate		:integer					:=	(IP_INPUT_FREQUENCY/BaudRate);
 
 	
 
 begin
 
 	Tx 	            <= Tx_int;
-	M_AXIS_tREADY	<= not busy_int;
+	S_AXIS_tREADY	<= not busy_int;
 	
 		process(clock)
 		begin 		
 			if rising_edge (clock) then
 				
-				data_in_int			<= unsigned(M_AXIS_tDATA);
-				send_int 			<= M_AXIS_tVALID;
+				data_in_int			<= unsigned(S_AXIS_tDATA);
+				send_int 			<= S_AXIS_tVALID;
 --				send_int_prev		<= send_int;
 				clock_counter 		<= clock_counter +1;
 				Tx_int				<= '1';
@@ -77,7 +76,7 @@ begin
 				end if; 
 				
 				
-				if (M_AXIS_tVALID = '1' and busy_int ='0') then 
+				if (S_AXIS_tVALID = '1' and busy_int ='0') then 
 				
 					busy_int 			<= '1';
 --				    if(include_Parity = true) then 	
